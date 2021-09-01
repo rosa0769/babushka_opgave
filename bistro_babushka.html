@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bistro Babushka</title>
+</head>
+<body>
+
+    <style>
+
+        
+     * {
+        box-sizing: border-box;
+        margin: 0.5rem;
+        padding-top: 0.5rem;
+       }
+      section {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 10px;
+      }
+
+
+      article {
+        border: 3px solid rgb(255, 255, 255);
+        padding: 10px;
+        border-radius: 5px;
+      }
+
+      article:hover{cursor: pointer;}
+
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 15px;
+      }
+
+      h2 {
+          display: flex;
+          justify-content: center;
+          font-family: 'Courier New', Courier, monospace;
+          color: black;
+      }
+
+      header nav {
+          display: flex;
+          justify-content: center;
+          gap: 1rem;
+      }
+
+      button {
+        margin: 0.2rem;
+          padding: 0.2rem;
+      }
+
+   
+
+      h1 {
+        color: rgb(114, 37, 37);
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 2.9rem;
+        text-align: center;
+
+        
+
+      }
+
+      p {          font-family: 'Courier New', Courier, monospace;
+
+    }
+
+      h3 {          font-family: 'Courier New', Courier, monospace;
+      
+}
+h4{font-family: 'Courier New', Courier, monospace;}
+
+      .valgt {
+        background-color: rgb(112, 41, 41);
+        color: white;
+
+      }
+
+      button {          
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 1rem;
+        border-radius: 20px;
+        background-color: rgb(255, 255, 255);
+        color: rgb(90, 65, 65);
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        border: 2px solid rgb(112, 41, 41);
+        cursor: pointer;
+        
+}
+      
+
+
+      button:hover { 
+        background-color: rgb(112, 41, 41);
+        color: white;
+      }
+
+      #popup {
+        width: 100vw;
+        height: 100vh;
+        background-color: #00000099;
+        position: fixed;
+        top: 0;
+        padding: 2rem;
+        display: none;
+        padding: 2% 10% 0 10%;
+      }
+
+      #popup article {
+        background-color: white;
+        display: grid;
+        place-items: center;
+      }
+
+      #popup img {
+        max-width: 55%;
+        border-radius: 5px;
+        margin-bottom: .5rem;
+      }
+      #popup button {
+        font-size: 1.5rem;
+        position: absolute;
+        top: 4vw;
+        left: 80vw;
+        cursor: pointer;
+      }
+
+      footer {margin: 2rem;
+      margin-bottom: 2rem;
+    display: flex;
+  justify-content: center;
+gap: 5rem;}
+
+@media screen and (max-width: 900px) {
+
+    button {
+      font-size: 1rem; 
+      padding: 10px; }
+}
+@media screen and (max-width: 650px) {
+
+    button {
+      font-size: 0.8rem; 
+      padding: 10px; }
+}
+
+@media screen and (max-width: 550px) {
+
+    button {
+      font-size: 0.7rem; 
+      padding: 10px;
+}
+
+    header nav {
+          gap: 0.05rem;
+      }
+
+}
+
+
+    </style>
+
+<body>
+  <header>
+    <h1>Bistro Babushka</h1>
+    <h2 class="txt_kategori">Alle</h2>
+      <nav>
+        <button data-kategori="alle" class="valgt">Alle</button>
+        <button data-kategori="forretter">Forretter</button>
+        <button data-kategori="hovedretter">Hovedretter</button>
+        <button data-kategori="sideorders">Sideorders</button>
+        <button data-kategori="desserter">Desserter</button>
+        <button data-kategori="drikkevarer">Drikkevarer</button>
+     </nav>
+  </header>
+  <main>
+<section></section>
+</main>
+<footer>
+  <p>Adresse:<br>Grønnegade 97a<br>1234 København K</p>
+  <p>Åbenningstider:<br>Mandag - fredag 10:30 - 22:00<br>Lørdag 12:00 - 23:00</p>
+</footer>
+<template>
+  <article class="menu">
+      <h3 class="navn"></h3>
+      <img src="" alt="" class="billede">
+      <h4 class="kategori"></h4>
+      <p class="kortbeskrivelse"></p>
+      <p class="pris"></p>
+      <p class="klik_info">Klik for mere info</p>
+  </article>
+</template>
+
+<section id="popup">
+  <button>X</button>
+   <article >
+    <h2><span class="navn"></span></h2>
+    <img src="" alt="" class="billede"/>
+    <p><b>Kategori: </b><span class="kategori"></span></p>
+    <p><b>Beskrivelse: </b><span class="langbeskrivelse"></span></p>
+    <p><b>Pris: </b><span class="pris"></span></p>
+  </article>
+</section>
+<script>
+  //Kontroller om DOM´en er loaded
+  window.addEventListener("DOMContentLoaded", start);
+
+  function start() {
+
+    const url = "https://babushka-dd8a.restdb.io/rest/menu";
+    const key = "600ec2fb1346a1524ff12de4"
+    const options = {
+        headers: {
+            'x-apikey': key
+        }
+    };
+
+    let kategorier;
+    let filter = "alle";
+
+    const filterKnapper = document.querySelectorAll("nav button");
+    filterKnapper.forEach(knap => knap.addEventListener("click", filtrerKategori));
+    loadJSON();
+
+    function filtrerKategori(){
+      filter = this.dataset.kategori;
+      document.querySelector(".valgt").classList.remove("valgt");
+      this.classList.add("valgt");
+
+      vis();
+
+      const txtKategori = document.querySelector("header .txt_kategori");
+      console.log(this);
+      txtKategori.textContent = this.textContent;
+    }
+
+    async function loadJSON() {
+      const JSONData = await fetch(url, options);
+      const jsonFile = await JSONData.json();
+      kategorier = jsonFile;
+      console.log(jsonFile);
+      vis();
+    }
+
+    function vis() {
+      const container = document.querySelector("section");
+      const temp = document.querySelector("template");
+      container.textContent = "";
+
+      kategorier.forEach((info) => {
+        if (filter == info.kategori || filter == "alle") {
+        let klon = temp.cloneNode(true).content;
+        const md = "-md.jpg";
+        klon.querySelector(".navn").textContent = info.navn;
+        klon.querySelector(".billede").src = "retter/" + info.billednavn + "-md.jpg";
+        klon.querySelector(".kategori").textContent = info.kategori;
+        klon.querySelector(".kortbeskrivelse").textContent = info.kortbeskrivelse;
+        klon.querySelector(".pris").textContent = "Pris: " + info.pris + " kr.-";
+        klon.querySelector("article").addEventListener("click",()=>visDetaljer(info));
+        container.appendChild(klon);
+        }
+      });
+      }
+    }
+
+    document.querySelector("#popup button").addEventListener("click", lukPopup);
+
+    function lukPopup(){
+        document.querySelector("#popup").style.display = "none";
+    }
+
+    function visDetaljer(detaljer){
+        console.log(detaljer);
+        const popup = document.querySelector("#popup");
+
+        popup.style.display = "block";
+        popup.querySelector(".navn").textContent = detaljer.navn;
+        popup.querySelector(".billede").src =
+          "retter/" + detaljer.billednavn + "-md.jpg";
+        popup.querySelector(".kategori").textContent = detaljer.kategori;
+        popup.querySelector(".langbeskrivelse").textContent = detaljer.langbeskrivelse;
+        popup.querySelector(".pris").textContent = detaljer.pris + " kr.-";
+    }  
+</script>
+</body>
+</html>
